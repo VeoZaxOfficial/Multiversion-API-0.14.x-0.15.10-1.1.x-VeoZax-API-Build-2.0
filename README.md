@@ -5,7 +5,6 @@ It's build to let Legacy 0.14.x & 0.15.10 & 1.1.x version Clients to connect and
 
 VZ API Development Started from: 22/03/2026
 
-========================================
 My Journey in Creating an API like this:
 =====================================
 It was a dream of mine to Create a Triple versioned Servers of McPE Alpha/Legacy.
