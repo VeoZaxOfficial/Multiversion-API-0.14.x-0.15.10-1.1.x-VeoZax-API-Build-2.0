@@ -19,12 +19,10 @@ Due to those reasons, The Craftsman/MasterCraft/MCPE (0.14.x - 0.15.10) communit
 
 At this point, I decided to Create an API with those 3 versions of Minecraft Pocket Edition and letting them play together on a single PocketMine-MP server.
 
-================================================================
 Multiversion API 0.14.x - 0.15.10 - 1.1.x (VeoZax API Build 2.0)
 ================================================================
 This API is mainly built top of the API called MySoft.
 
-=====================================
 What is my Role in building this API?
 =====================================
 MySoft API supports versions from 0.15.x to 1.21.80
@@ -73,7 +71,6 @@ None of these fixes came easy. Every single one on that list was a night where s
 building for three at once, and keeping all three happy at the same time, is a whole different beast. But I kept going, because I knew what this
 meant to the Craftsman/MCPE Legacy Community. This wasn't just code to me, it was keeping something alive that a lot of people still love and miss.
 
-======================
 Why I'm Releasing This
 ======================
 This API was never meant to just sit on my machine. The whole point of building a Multi-Version bridge like this was to let the Legacy MCPE community
@@ -81,7 +78,6 @@ keep playing together, no matter which version they're stuck on or which one the
 this Project stood for from day one. So I'm publishing it here, for free, for anyone who wants to run their own Legacy 0.14.x - 0.15.10 - 1.1.x server
 and keep this community going.
 
-====================================
 Some more Info You need to Know
 ====================================
 I want to be honest about this: this whole thing was built by me, alone. No team, no co-developers, no one sitting next to me
@@ -96,7 +92,6 @@ triple-version bridge is still solo work. I just don't want to pretend the origi
 
 Everything from "Added 0.14.x support" down to "Fixed Skin Bug" up there, that's mine.
 
-=========================
 Heads Up Before You Run This
 =========================
 Since this is built and maintained by one person, expect bugs. Expect edge cases I haven't caught yet, some incompatibility
@@ -107,7 +102,6 @@ If you hit something broken, please report it, that helps a lot. And if you know
 help develop this further, fix bugs, add features, or just keep it alive long term, I'd genuinely welcome that. This was
 built solo, but it doesn't have to stay that way. Reach out on Discord if you want to get involved.
 
-=====================================
 Plugin Development for VeoZax API
 =====================================
 If you're building plugins for a server running the VeoZax API, they need to be written against PocketMine-MP 3.0.0 ALPHA.
@@ -118,7 +112,6 @@ api: ["VeoZaxAPI"]
 
 Without that line, VeoZax API will refuse to load your plugin, so don't skip it.
 
-======================================================
 Requirements & How to Run - Checkout my YouTube Video
 ======================================================
 I made a full video tutorial on my YouTube channel walking through how to set up and run the VeoZax API. If you're new to this
@@ -130,21 +123,18 @@ If you'd rather skip GitHub and grab a ready-to-use copy directly, you can also 
 
 [Download VeoZax API (MediaFire)](https://www.mediafire.com/file/khi8ddjvs18hyg0/Multiversion_API_0.14.x_-_0.15.10_-_1.1.x.zip/file)
 
-============
 License
 ============
 This API is licensed under the GNU Lesser General Public License v3 (or later), same as the original PocketMine-MP.
 Feel free to use it. If you modify or enhance this API, please publish your changes back to GitHub, open source.
 Do not claim this API as privately owned, it's built to stay free for every Legacy 0.14.x - 0.15.10 - 1.1.x user.
 
-=========
 Community
 =========
 YouTube: @VeoZax
 Discord: https://discord.gg/dCzgPYam2J
 Website: https://info.veozax.xyz
 
-=============
 Final Words
 =============
 If you're reading this, you're probably about to run your own piece of the Craftsman/MCPE Legacy community. Take care of it.
