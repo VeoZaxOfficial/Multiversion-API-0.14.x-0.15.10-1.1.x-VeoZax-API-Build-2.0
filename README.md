@@ -125,7 +125,7 @@ If you'd rather skip GitHub and grab a ready-to-use copy directly, you can also 
 
 License
 ============
-This API is licensed under the GNU Lesser General Public License v3 (or later), same as the original PocketMine-MP.
+This API project is licensed under the [GNU Lesser General Public License v2.1](LICENSE), same as the original PocketMine-MP.
 Feel free to use it. If you modify or enhance this API, please publish your changes back to GitHub, open source.
 Do not claim this API as privately owned, it's built to stay free for every Legacy 0.14.x - 0.15.10 - 1.1.x user.
 
