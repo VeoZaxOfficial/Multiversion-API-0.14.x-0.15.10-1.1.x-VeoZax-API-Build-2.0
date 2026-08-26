@@ -121,7 +121,7 @@ or just want to see it working before you dive in, watch it here:
 
 If you'd rather skip GitHub and grab a ready-to-use copy directly, you can also download the API via MediaFire:
 
-[Download VeoZax API (MediaFire)](https://www.mediafire.com/file/z3acge5hpj7pnb5/Multiversion_API_0.14.x_-_0.15.10_-_1.1.x_-_VeoZaxAPI_Build_2.0.zip/file)
+[Download VeoZax API (MediaFire)](https://www.mediafire.com/file/hn76ozjton0hrlo/Multiversion_API_0.14.x_-_0.15.10_-_1.1.x_-_VeoZaxAPI_Build_2.0.zip/file)
 
 License
 ============
