@@ -1,0 +1,52 @@
+VeoZax API
+Copyright (C) 2026 VeoZax API
+
+This library is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with this library. If not, see <https://www.gnu.org/licenses/>.
+
+---
+
+This project is licensed under the GNU Lesser General Public License v3.0.
+
+The full license text consists of the GNU Lesser General Public License v3.0
+(this file's terms), which incorporates by reference the GNU General Public
+License v3.0. The complete, authoritative text of both licenses is available at:
+
+  GNU LGPL v3.0: https://www.gnu.org/licenses/lgpl-3.0.txt
+  GNU GPL v3.0:  https://www.gnu.org/licenses/gpl-3.0.txt
+
+A summary of the LGPL-3.0 terms:
+
+  1. You may copy, distribute, and modify VeoZax API under the terms of this
+     license, provided that you also make available the source code of any
+     modifications to VeoZax API itself under LGPL-3.0.
+
+  2. You may use VeoZax API as a library within your own plugin or server
+     software (a "work that uses the Library") without being required to
+     license your own code under LGPL-3.0 or GPL-3.0, PROVIDED you:
+       a. Give prominent notice that VeoZax API is used and is covered by
+          this License.
+       b. Allow users to modify and recompile/re-run their application with
+          a modified version of VeoZax API, if the application is linked to
+          it dynamically.
+       c. Include a copy of this License with your distribution.
+
+  3. If you modify VeoZax API itself and distribute your modified version,
+     that modified version must remain licensed under LGPL-3.0, with source
+     code made available.
+
+  4. VeoZax API is provided WITHOUT WARRANTY of any kind.
+
+This summary is provided for convenience only and is not a substitute for
+the full license text linked above, which governs in the event of any
+conflict or ambiguity.
