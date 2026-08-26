@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+<?php
+
+echo "PocketMine-MP SourceLoader" . PHP_EOL;
+echo "Maintained by VeoZax" . PHP_EOL;
+echo "https://github.com/VeoZaxOfficial/PMMPSourceLoader" . PHP_EOL;
+echo PHP_EOL;
+
+require_once __DIR__ . '/src/pocketmine/PocketMine.php';
