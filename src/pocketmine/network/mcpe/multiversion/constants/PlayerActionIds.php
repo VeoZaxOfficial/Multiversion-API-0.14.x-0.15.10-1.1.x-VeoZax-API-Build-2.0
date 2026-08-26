@@ -1,0 +1,64 @@
+<?php
+
+/* 
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
+ *
+ *  This API has now modified by VeoZax under GNU Lesser General Public License.
+ *  Feel free to use it + if you are willing to modify or Enhance this API,
+ *  Make sure to publish your changes to the GitHub open sourced.
+ *  Do Not Own This API Privately Since this API is made to use Freely for Every
+ *  Legacy users from 0.14.x - 0.15.10 - 1.1.x
+ *   
+ *               ╦  ╦┌─┐┌─┐╔═╗┌─┐─┐ ┬  ╔═╗┌─┐┬
+ *               ╚╗╔╝├┤ │ │╔═╝├─┤┌┴┬┘  ╠═╣├─┘│
+ *                ╚╝ └─┘└─┘╚═╝┴ ┴┴ └─  ╩ ╩┴  ┴
+ *  
+ *  	         » Multi-Version API by VeoZax 
+ *             » Accepted MCPE Versions: 0.14x - 0.15.10 - 1.1.x
+ *  			     » YouTube: @VeoZax
+ *            » Discord: https://discord.gg/dCzgPYam2J
+ *               » Website: https://info.veozax.xyz
+ */
+
+
+declare(strict_types=1);
+namespace pocketmine\network\mcpe\multiversion\constants;
+use pocketmine\network\mcpe\protocol\ProtocolInfo;
+final class PlayerActionIds{
+	private function __construct(){
+	}
+	public const PLAYER_ACTION_IDS = [
+                                                                                        ProtocolInfo::PROTOCOL_41 => [
+            'ACTION_START_BREAK' => 0,
+            'ACTION_ABORT_BREAK' => 1,
+            'ACTION_STOP_BREAK' => 2,
+            'ACTION_GET_UPDATED_BLOCK' => 3,
+            'ACTION_DROP_ITEM' => 4,
+            'ACTION_RELEASE_ITEM' => 5,
+            'ACTION_STOP_SLEEPING' => 6,
+            'ACTION_RESPAWN' => 7,
+            'ACTION_JUMP' => 8,
+            'ACTION_START_SPRINT' => 9,
+            'ACTION_STOP_SPRINT' => 10,
+            'ACTION_START_SNEAK' => 11,
+            'ACTION_STOP_SNEAK' => 12,
+            'ACTION_DIMENSION_CHANGE_REQUEST' => 13,
+            'ACTION_DIMENSION_CHANGE_ACK' => 14,
+            'ACTION_START_GLIDE' => 15,
+            'ACTION_STOP_GLIDE' => 16,
+            'ACTION_BUILD_DENIED' => 17,
+            'ACTION_CONTINUE_BREAK' => 18
+        ]
+	];}

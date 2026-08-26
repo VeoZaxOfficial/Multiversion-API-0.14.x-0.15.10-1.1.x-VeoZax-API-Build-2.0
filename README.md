@@ -119,10 +119,13 @@ or just want to see it working before you dive in, watch it here:
 
 [Watch the Setup Tutorial](https://youtu.be/taupSR8oO40?si=hL2mkyajHHlnTHyY)
 
+<<<<<<< HEAD
+=======
 If you'd rather skip GitHub and grab a ready-to-use copy directly, you can also download the API via MediaFire:
 
 [Download VeoZax API (MediaFire)](https://www.mediafire.com/file/hn76ozjton0hrlo/Multiversion_API_0.14.x_-_0.15.10_-_1.1.x_-_VeoZaxAPI_Build_2.0.zip/file)
 
+>>>>>>> 7ebdba3a8bd8726f05998ec7f14cd819aa1c405a
 License
 ============
 This API project is licensed under the [GNU Lesser General Public License v2.1](LICENSE), same as the original PocketMine-MP.

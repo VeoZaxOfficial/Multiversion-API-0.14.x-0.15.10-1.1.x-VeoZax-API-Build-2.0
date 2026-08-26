@@ -1,0 +1,110 @@
+<?php
+
+/* 
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
+ *
+ *  This API has now modified by VeoZax under GNU Lesser General Public License.
+ *  Feel free to use it + if you are willing to modify or Enhance this API,
+ *  Make sure to publish your changes to the GitHub open sourced.
+ *  Do Not Own This API Privately Since this API is made to use Freely for Every
+ *  Legacy users from 0.14.x - 0.15.10 - 1.1.x
+ *   
+ *               ╦  ╦┌─┐┌─┐╔═╗┌─┐─┐ ┬  ╔═╗┌─┐┬
+ *               ╚╗╔╝├┤ │ │╔═╝├─┤┌┴┬┘  ╠═╣├─┘│
+ *                ╚╝ └─┘└─┘╚═╝┴ ┴┴ └─  ╩ ╩┴  ┴
+ *  
+ *  	         » Multi-Version API by VeoZax 
+ *             » Accepted MCPE Versions: 0.14x - 0.15.10 - 1.1.x
+ *  			     » YouTube: @VeoZax
+ *            » Discord: https://discord.gg/dCzgPYam2J
+ *               » Website: https://info.veozax.xyz
+ */
+
+
+declare(strict_types=1);
+namespace pocketmine\nbt\tag;
+use PHPUnit\Framework\TestCase;use pocketmine\nbt\NBT;use function array_fill;use function array_key_first;use function array_map;
+class ListTagTest extends TestCase{
+	public function testConstructorValues() : void{
+		$array = [];
+		for($i = 0; $i < 5; ++$i){
+			$array[] = new StringTag("test$i");
+		}
+		$list = new ListTag($array);
+		self::assertEquals(NBT::TAG_String, $list->getTagType());
+		self::assertCount(5, $list);
+	}
+	public function testTypeDetection() : void{
+		$list = new ListTag([], NBT::TAG_End);
+		$list->push(new StringTag("works"));
+		self::assertEquals(NBT::TAG_String, $list->getTagType(), "Adding a tag to an empty list of TAG_End type should change its type");
+	}
+	public function testAddWrongTypeEmptyList() : void{
+		$this->expectException(\TypeError::class);
+		$list = new ListTag([], NBT::TAG_Compound);
+		$list->push(new StringTag("shouldn't work"));
+	}
+	public function testSetEmptyListType() : void{
+		$list = new ListTag([], NBT::TAG_String);
+		$list->setTagType(NBT::TAG_Compound);
+		$list->push(new CompoundTag());
+		self::assertCount(1, $list);
+		$list->shift(); 
+		$list->setTagType(NBT::TAG_Byte);
+		$list->push(new ByteTag(0));
+		self::assertCount(1, $list);
+	}
+	public function testSetNotEmptyListType() : void{
+		$this->expectException(\LogicException::class);
+		$list = new ListTag();
+		$list->push(new StringTag("string"));
+		$list->setTagType(NBT::TAG_Compound);
+	}
+	public function testClone() : void{
+		$tag = new ListTag();
+		for($i = 0; $i < 5; ++$i){
+			$tag->push(new StringTag("hi"));
+		}
+		$tag2 = clone $tag;
+		self::assertEquals($tag->getCount(), $tag2->getCount());
+		foreach($tag2 as $index => $child){
+			if($child instanceof ImmutableTag){
+				self::assertSame($child, $tag->get($index));
+			}else{
+				self::assertNotSame($child, $tag->get($index));
+			}
+		}
+	}
+	public function testRecursiveClone() : void{
+		$tag = new ListTag();
+		$child = new ListTag();
+		$child->push($tag);
+		$tag->push($child);
+		$this->expectException(\RuntimeException::class);
+		clone $tag; 
+	}
+	public function testTooManyConstructorArgs() : void{
+		$this->expectException(\ArgumentCountError::class);
+		new ListTag([new IntTag(1)], NBT::TAG_End, "world");
+	}
+	public function testModificationDuringIteration() : void{
+		$tag = new ListTag(array_map(function(int $v) : IntTag{
+			return new IntTag($v);
+		}, array_fill(0, 10, 0)));
+		foreach($tag as $k => $v){
+			$tag->remove(0); 
+		}
+		self::assertCount(0, $tag);
+	}}
