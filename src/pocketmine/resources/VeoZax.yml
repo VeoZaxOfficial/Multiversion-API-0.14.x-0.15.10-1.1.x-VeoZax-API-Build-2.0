@@ -1,0 +1,27 @@
+#VeoZax Configuration File
+server-log: true
+
+administrators-password: VZAPIx84LMDR75
+administrators-locked: false
+
+server-owner: VeoZax
+
+owner-access-password: VZAPIx9MT4YBV1
+owners-locked: false
+sub-owners: []
+
+auto-restart: false
+auto-restart-timer: 9000
+restart-message: "§eServer Restarted!"
+
+transfer-webhook: false
+transfer-webhook-url: ""
+transfer-self-address: ""
+
+transfer-lobbies:
+  Lobby1:
+    ip: "1.2.3.4"
+    port: 19132
+  Lobby2:
+    ip: "1.2.3.4"
+    port: 19133

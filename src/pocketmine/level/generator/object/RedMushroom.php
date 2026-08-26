@@ -1,0 +1,63 @@
+<?php
+
+/* 
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
+ *
+ *  This API has now modified by VeoZax under GNU Lesser General Public License.
+ *  Feel free to use it + if you are willing to modify or Enhance this API,
+ *  Make sure to publish your changes to the GitHub open sourced.
+ *  Do Not Own This API Privately Since this API is made to use Freely for Every
+ *  Legacy users from 0.14.x - 0.15.10 - 1.1.x
+ *   
+ *               ╦  ╦┌─┐┌─┐╔═╗┌─┐─┐ ┬  ╔═╗┌─┐┬
+ *               ╚╗╔╝├┤ │ │╔═╝├─┤┌┴┬┘  ╠═╣├─┘│
+ *                ╚╝ └─┘└─┘╚═╝┴ ┴┴ └─  ╩ ╩┴  ┴
+ *  
+ *  	         » Multi-Version API by VeoZax 
+ *             » Accepted MCPE Versions: 0.14x - 0.15.10 - 1.1.x
+ *  			     » YouTube: @VeoZax
+ *            » Discord: https://discord.gg/dCzgPYam2J
+ *               » Website: https://info.veozax.xyz
+ */
+
+namespace pocketmine\level\generator\object;
+use pocketmine\block\Block;use pocketmine\block\BlockFactory;use pocketmine\block\Wood;use pocketmine\level\ChunkManager;use pocketmine\utils\Random;
+class RedMushroom extends Mushroom{
+	public function __construct(){
+		$this->type = 14;
+		$this->type2 = 10;
+		$this->trunkBlock = Block::BROWN_MUSHROOM_BLOCK;
+		$this->leafBlock = Block::RED_MUSHROOM_BLOCK;
+	}
+	public function placeObject(ChunkManager $level, $x, $y, $z, Random $random){
+		$this->treeHeight = $random->nextRange(0,2) + 5;
+		$this->placeTrunk($level, $x, $y, $z, $random, $this->treeHeight - 1);
+		$yyy = $this->treeHeight + $y;
+		for($xx = $x - 2; $xx <= $x + 2; ++$xx){
+			for($zz = $z - 2; $zz <= $z + 2; ++$zz){
+				for($yy = $yyy - 3; $yy <= $yyy; ++$yy){
+					if((!BlockFactory::$solid[$level->getBlockIdAt($xx, $yy, $zz)] || isset($this->overridable[$level->getBlockIdAt($xx, $yy, $zz)]))){
+						if($yy != $yyy && ($xx == $x - 2 || $xx == $x + 2 || $zz == $z - 2 || $zz == $z + 2) && !(($xx == $x - 2 || $xx == $x + 2) && ($zz == $z - 2 || $zz == $z + 2))){
+							$level->setBlockIdAt($xx, $yy, $zz, $this->leafBlock);
+							$level->setBlockDataAt($xx, $yy, $zz, 14);
+						}elseif ($yy == $yyy && !($xx == $x - 2 || $xx == $x + 2 || $zz == $z - 2 || $zz == $z + 2)){
+							$level->setBlockIdAt($xx, $yy, $zz, $this->leafBlock);
+							$level->setBlockDataAt($xx, $yy, $zz, 14);
+						}
+					}
+				}
+			}
+		}
+	}}

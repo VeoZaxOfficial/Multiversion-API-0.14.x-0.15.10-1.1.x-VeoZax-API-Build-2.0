@@ -1,0 +1,112 @@
+<?php
+
+/* 
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
+ *
+ *  This API has now modified by VeoZax under GNU Lesser General Public License.
+ *  Feel free to use it + if you are willing to modify or Enhance this API,
+ *  Make sure to publish your changes to the GitHub open sourced.
+ *  Do Not Own This API Privately Since this API is made to use Freely for Every
+ *  Legacy users from 0.14.x - 0.15.10 - 1.1.x
+ *   
+ *               ╦  ╦┌─┐┌─┐╔═╗┌─┐─┐ ┬  ╔═╗┌─┐┬
+ *               ╚╗╔╝├┤ │ │╔═╝├─┤┌┴┬┘  ╠═╣├─┘│
+ *                ╚╝ └─┘└─┘╚═╝┴ ┴┴ └─  ╩ ╩┴  ┴
+ *  
+ *  	         » Multi-Version API by VeoZax 
+ *             » Accepted MCPE Versions: 0.14x - 0.15.10 - 1.1.x
+ *  			     » YouTube: @VeoZax
+ *            » Discord: https://discord.gg/dCzgPYam2J
+ *               » Website: https://info.veozax.xyz
+ */
+
+
+declare(strict_types=1);
+namespace pocketmine\network\mcpe\protocol\types\biome\chunkgen;
+use pocketmine\network\mcpe\NetworkBinaryStream;
+final class BiomeDefinitionChunkGenData{
+	public function __construct(
+		private ?BiomeClimateData $climate,
+		private ?BiomeConsolidatedFeaturesData $consolidatedFeatures,
+		private ?BiomeMountainParamsData $mountainParams,
+		private ?BiomeSurfaceMaterialAdjustmentData $surfaceMaterialAdjustment,
+		private ?BiomeSurfaceMaterialData $surfaceMaterial,
+		private bool $swampSurface,
+		private bool $frozenOceanSurface,
+		private bool $theEndSurface,
+		private ?BiomeMesaSurfaceData $mesaSurface,
+		private ?BiomeCappedSurfaceData $cappedSurface,
+		private ?BiomeOverworldGenRulesData $overworldGenRules,
+		private ?BiomeMultinoiseGenRulesData $multinoiseGenRules,
+		private ?BiomeLegacyWorldGenRulesData $legacyWorldGenRules,
+	){}
+	public function getClimate() : ?BiomeClimateData{ return $this->climate; }
+	public function getConsolidatedFeatures() : ?BiomeConsolidatedFeaturesData{ return $this->consolidatedFeatures; }
+	public function getMountainParams() : ?BiomeMountainParamsData{ return $this->mountainParams; }
+	public function getSurfaceMaterialAdjustment() : ?BiomeSurfaceMaterialAdjustmentData{ return $this->surfaceMaterialAdjustment; }
+	public function getSurfaceMaterial() : ?BiomeSurfaceMaterialData{ return $this->surfaceMaterial; }
+	public function hasSwampSurface() : bool{ return $this->swampSurface; }
+	public function hasFrozenOceanSurface() : bool{ return $this->frozenOceanSurface; }
+	public function hasTheEndSurface() : bool{ return $this->theEndSurface; }
+	public function getMesaSurface() : ?BiomeMesaSurfaceData{ return $this->mesaSurface; }
+	public function getCappedSurface() : ?BiomeCappedSurfaceData{ return $this->cappedSurface; }
+	public function getOverworldGenRules() : ?BiomeOverworldGenRulesData{ return $this->overworldGenRules; }
+	public function getMultinoiseGenRules() : ?BiomeMultinoiseGenRulesData{ return $this->multinoiseGenRules; }
+	public function getLegacyWorldGenRules() : ?BiomeLegacyWorldGenRulesData{ return $this->legacyWorldGenRules; }
+	public static function read(NetworkBinaryStream $in) : self{
+		$climate = $in->readOptional(fn() => BiomeClimateData::read($in));
+		$consolidatedFeatures = $in->readOptional(fn() => BiomeConsolidatedFeaturesData::read($in));
+		$mountainParams = $in->readOptional(fn() => BiomeMountainParamsData::read($in));
+		$surfaceMaterialAdjustment = $in->readOptional(fn() => BiomeSurfaceMaterialAdjustmentData::read($in));
+		$surfaceMaterial = $in->readOptional(fn() => BiomeSurfaceMaterialData::read($in));
+		$swampSurface = $in->getBool();
+		$frozenOceanSurface = $in->getBool();
+		$theEndSurface = $in->getBool();
+		$mesaSurface = $in->readOptional(fn() => BiomeMesaSurfaceData::read($in));
+		$cappedSurface = $in->readOptional(fn() => BiomeCappedSurfaceData::read($in));
+		$overworldGenRules = $in->readOptional(fn() => BiomeOverworldGenRulesData::read($in));
+		$multinoiseGenRules = $in->readOptional(fn() => BiomeMultinoiseGenRulesData::read($in));
+		$legacyWorldGenRules = $in->readOptional(fn() => BiomeLegacyWorldGenRulesData::read($in));
+		return new self(
+			$climate,
+			$consolidatedFeatures,
+			$mountainParams,
+			$surfaceMaterialAdjustment,
+			$surfaceMaterial,
+			$swampSurface,
+			$frozenOceanSurface,
+			$theEndSurface,
+			$mesaSurface,
+			$cappedSurface,
+			$overworldGenRules,
+			$multinoiseGenRules,
+			$legacyWorldGenRules
+		);
+	}
+	public function write(NetworkBinaryStream $out) : void{
+		$out->writeOptional($this->climate, fn(BiomeClimateData $climate) => $climate->write($out));
+		$out->writeOptional($this->consolidatedFeatures, fn(BiomeConsolidatedFeaturesData $consolidatedFeatures) => $consolidatedFeatures->write($out));
+		$out->writeOptional($this->mountainParams, fn(BiomeMountainParamsData $mountainParams) => $mountainParams->write($out));
+		$out->writeOptional($this->surfaceMaterialAdjustment, fn(BiomeSurfaceMaterialAdjustmentData $surfaceMaterialAdjustment) => $surfaceMaterialAdjustment->write($out));
+		$out->writeOptional($this->surfaceMaterial, fn(BiomeSurfaceMaterialData $surfaceMaterial) => $surfaceMaterial->write($out));
+		$out->putBool($this->swampSurface);
+		$out->putBool($this->frozenOceanSurface);
+		$out->putBool($this->theEndSurface);
+		$out->writeOptional($this->mesaSurface, fn(BiomeMesaSurfaceData $mesaSurface) => $mesaSurface->write($out));
+		$out->writeOptional($this->cappedSurface, fn(BiomeCappedSurfaceData $cappedSurface) => $cappedSurface->write($out));
+		$out->writeOptional($this->overworldGenRules, fn(BiomeOverworldGenRulesData $overworldGenRules) => $overworldGenRules->write($out));
+		$out->writeOptional($this->multinoiseGenRules, fn(BiomeMultinoiseGenRulesData $multinoiseGenRules) => $multinoiseGenRules->write($out));
+		$out->writeOptional($this->legacyWorldGenRules, fn(BiomeLegacyWorldGenRulesData $legacyWorldGenRules) => $legacyWorldGenRules->write($out));
+	}}

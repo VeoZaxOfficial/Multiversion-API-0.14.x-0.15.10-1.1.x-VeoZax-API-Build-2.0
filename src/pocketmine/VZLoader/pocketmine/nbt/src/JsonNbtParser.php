@@ -1,0 +1,250 @@
+<?php
+
+/* 
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
+ *
+ *  This API has now modified by VeoZax under GNU Lesser General Public License.
+ *  Feel free to use it + if you are willing to modify or Enhance this API,
+ *  Make sure to publish your changes to the GitHub open sourced.
+ *  Do Not Own This API Privately Since this API is made to use Freely for Every
+ *  Legacy users from 0.14.x - 0.15.10 - 1.1.x
+ *   
+ *               ╦  ╦┌─┐┌─┐╔═╗┌─┐─┐ ┬  ╔═╗┌─┐┬
+ *               ╚╗╔╝├┤ │ │╔═╝├─┤┌┴┬┘  ╠═╣├─┘│
+ *                ╚╝ └─┘└─┘╚═╝┴ ┴┴ └─  ╩ ╩┴  ┴
+ *  
+ *  	         » Multi-Version API by VeoZax 
+ *             » Accepted MCPE Versions: 0.14x - 0.15.10 - 1.1.x
+ *  			     » YouTube: @VeoZax
+ *            » Discord: https://discord.gg/dCzgPYam2J
+ *               » Website: https://info.veozax.xyz
+ */
+
+
+declare(strict_types=1);
+namespace pocketmine\nbt;
+use Exception;use pocketmine\nbt\tag\ByteTag;use pocketmine\nbt\tag\CompoundTag;use pocketmine\nbt\tag\DoubleTag;use pocketmine\nbt\tag\FloatTag;use pocketmine\nbt\tag\IntTag;use pocketmine\nbt\tag\ListTag;use pocketmine\nbt\tag\LongTag;use pocketmine\nbt\tag\NamedTag;use pocketmine\nbt\tag\ShortTag;use pocketmine\nbt\tag\StringTag;use pocketmine\utils\BinaryStream;use UnexpectedValueException;use function is_numeric;use function strpos;use function strtolower;use function substr;use function trim;
+class JsonNbtParser{
+	public static function parseJson(string $data){
+		$stream = new BinaryStream(trim($data, " \r\n\t"));
+		if(($b = $stream->get(1)) !== "{"){
+			throw new UnexpectedValueException("Syntax error: expected compound start but got '$b'");
+		}
+		$ret = self::parseCompound($stream, ""); 
+		if(!$stream->feof()){
+			throw new UnexpectedValueException("Syntax error: unexpected trailing characters after end of tag: " . $stream->getRemaining());
+		}
+		return $ret;
+	}
+	private static function parseList(BinaryStream $stream, string $name = "") : ListTag{
+		$retval = new ListTag($name);
+		if(self::skipWhitespace($stream, "]")){
+			while(!$stream->feof()){
+				$retval->push(self::readValue($stream));
+				if(self::readBreak($stream, "]")){
+					return $retval;
+				}
+			}
+			throw new UnexpectedValueException("Syntax error: unexpected end of stream reading tag '$name'");
+		}
+		return $retval;
+	}
+	private static function parseCompound(BinaryStream $stream, string $name = "") : CompoundTag{
+		$retval = new CompoundTag($name);
+		if(self::skipWhitespace($stream, "}")){
+			while(!$stream->feof()){
+				$retval->setTag(self::readValue($stream, self::readKey($stream)));
+				if(self::readBreak($stream, "}")){
+					return $retval;
+				}
+			}
+			throw new UnexpectedValueException("Syntax error: unexpected end of stream reading tag '$name'");
+		}
+		return $retval;
+	}
+	private static function skipWhitespace(BinaryStream $stream, string $terminator) : bool{
+		while(!$stream->feof()){
+			$b = $stream->get(1);
+			if($b === $terminator){
+				return false;
+			}
+			if($b === " " or $b === "\n" or $b === "\t" or $b === "\r"){
+				continue;
+			}
+			$stream->setOffset($stream->getOffset() - 1);
+			return true;
+		}
+		throw new UnexpectedValueException("Syntax error: unexpected end of stream, expected start of key");
+	}
+	private static function readBreak(BinaryStream $stream, string $terminator) : bool{
+		if($stream->feof()){
+			throw new UnexpectedValueException("Syntax error: unexpected end of stream, expected '$terminator'");
+		}
+		$offset = $stream->getOffset();
+		$c = $stream->get(1);
+		if($c === ","){
+			return false;
+		}
+		if($c === $terminator){
+			return true;
+		}
+		throw new UnexpectedValueException("Syntax error: unexpected '$c' end at offset $offset");
+	}
+	private static function readValue(BinaryStream $stream, string $name = "") : NamedTag{
+		$value = "";
+		$inQuotes = false;
+		$offset = $stream->getOffset();
+		$foundEnd = false;
+		$retval = null;
+		while(!$stream->feof()){
+			$offset = $stream->getOffset();
+			$c = $stream->get(1);
+			if($inQuotes){ 
+				if($c === '"'){
+					$inQuotes = false;
+					$retval = new StringTag($name, $value);
+					$foundEnd = true;
+				}elseif($c === "\\"){
+					$value .= $stream->get(1);
+				}else{
+					$value .= $c;
+				}
+			}else{
+				if($c === "," or $c === "}" or $c === "]"){ 
+					$stream->setOffset($stream->getOffset() - 1); 
+					$foundEnd = true;
+					break;
+				}
+				if($value === "" or $foundEnd){
+					if($c === "\r" or $c === "\n" or $c === "\t" or $c === " "){ 
+						continue;
+					}
+					if($foundEnd){ 
+						throw new UnexpectedValueException("Syntax error: unexpected '$c' after end of value at offset $offset");
+					}
+				}
+				if($c === '"'){ 
+					if($value !== ""){
+						throw new UnexpectedValueException("Syntax error: unexpected quote at offset $offset");
+					}
+					$inQuotes = true;
+				}elseif($c === "{"){ 
+					if($value !== ""){
+						throw new UnexpectedValueException("Syntax error: unexpected compound start at offset $offset (enclose in double quotes for literal)");
+					}
+					$retval = self::parseCompound($stream, $name);
+					$foundEnd = true;
+				}elseif($c === "["){ 
+					if($value !== ""){
+						throw new UnexpectedValueException("Syntax error: unexpected list start at offset $offset (enclose in double quotes for literal)");
+					}
+					$retval = self::parseList($stream, $name);
+					$foundEnd = true;
+				}else{ 
+					$value .= $c;
+				}
+			}
+		}
+		if($retval !== null){
+			return $retval;
+		}
+		if($value === ""){
+			throw new UnexpectedValueException("Syntax error: empty value at offset $offset");
+		}
+		if(!$foundEnd){
+			throw new UnexpectedValueException("Syntax error: unexpected end of stream at offset $offset");
+		}
+		$last = strtolower(substr($value, -1));
+		$part = substr($value, 0, -1);
+		if($last !== "b" and $last !== "s" and $last !== "l" and $last !== "f" and $last !== "d"){
+			$part = $value;
+			$last = null;
+		}
+		if(is_numeric($part)){
+			if($last === "f" or $last === "d" or strpos($part, ".") !== false or strpos($part, "e") !== false){ 
+				$value = (float) $part;
+				switch($last){
+					case "d":
+						return new DoubleTag($name, $value);
+					case "f":
+					default:
+						return new FloatTag($name, $value);
+				}
+			}else{
+				$value = (int) $part;
+				switch($last){
+					case "b":
+						return new ByteTag($name, $value);
+					case "s":
+						return new ShortTag($name, $value);
+					case "l":
+						return new LongTag($name, $value);
+					default:
+						return new IntTag($name, $value);
+				}
+			}
+		}else{
+			return new StringTag($name, $value);
+		}
+	}
+	private static function readKey(BinaryStream $stream) : string{
+		$key = "";
+		$offset = $stream->getOffset();
+		$inQuotes = false;
+		$foundEnd = false;
+		while(!$stream->feof()){
+			$c = $stream->get(1);
+			if($inQuotes){
+				if($c === '"'){
+					$inQuotes = false;
+					$foundEnd = true;
+				}elseif($c === "\\"){
+					$key .= $stream->get(1);
+				}else{
+					$key .= $c;
+				}
+			}else{
+				if($c === ":"){
+					$foundEnd = true;
+					break;
+				}
+				if($key === "" or $foundEnd){
+					if($c === "\r" or $c === "\n" or $c === "\t" or $c === " "){ 
+						continue;
+					}
+					if($foundEnd){ 
+						throw new UnexpectedValueException("Syntax error: unexpected '$c' after end of value at offset $offset");
+					}
+				}
+				if($c === '"'){ 
+					if($key !== ""){
+						throw new UnexpectedValueException("Syntax error: unexpected quote at offset $offset");
+					}
+					$inQuotes = true;
+				}elseif($c === "{" or $c === "}" or $c === "[" or $c === "]" or $c === ","){
+					throw new UnexpectedValueException("Syntax error: unexpected '$c' at offset $offset (enclose in double quotes for literal)");
+				}else{ 
+					$key .= $c;
+				}
+			}
+		}
+		if($key === ""){
+			throw new UnexpectedValueException("Syntax error: invalid empty key at offset $offset");
+		}
+		if(!$foundEnd){
+			throw new UnexpectedValueException("Syntax error: unexpected end of stream at offset $offset");
+		}
+		return $key;
+	}}
